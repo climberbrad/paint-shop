@@ -252,7 +252,7 @@ public class App {
    */
   public static void printPaintOptions(PaintOption[] results) {
     for (PaintOption option : results) {
-      System.out.print(option.paintFinish + " ");
+      System.out.print(option.paintFinish.type + " ");
     }
     System.out.println("\n");
   }

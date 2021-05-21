@@ -13,6 +13,6 @@ public class PaintOption {
 
   @Override
   public String toString() {
-    return colorIndex + " " + paintFinish;
+    return colorIndex + " " + paintFinish.type;
   }
 }

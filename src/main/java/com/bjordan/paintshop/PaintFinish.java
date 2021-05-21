@@ -4,7 +4,7 @@ public enum PaintFinish {
   GLOSS("G"),
   MATTE("M");
 
-  private final String type;
+  public final String type;
 
   PaintFinish(String type) {
     this.type = type;
