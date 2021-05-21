@@ -21,8 +21,8 @@ public class App {
 
   /**
    * Iterate through customers and put into two buckets -> 1: single PaintOption 2: multiple PaintOptions
-   * Fill a PaintOption[] solution with all GLOSS and MUTABLE PaintOptions
-   * First use single PaintOption customers and set their PaintOptions on the solution PaintOption array setting them as immutable PaintOptions
+   * Default a PaintOption[] solution with GLOSS and MUTABLE PaintOptions
+   * First iterate over single PaintOption customers adding their PaintOptions to solution[] setting their PaintOption as immutable.
    * Iterate over multiple PaintOption customers, trying to match GLOSS first, then MATTE if available
    */
   public App(String filePath) {
@@ -66,7 +66,8 @@ public class App {
       match = matchMultiOptionCustomer(matteOptions, solution);
 
       if (!match) {
-        erorrAndExit(multiOptionCustomer);
+        printError(multiOptionCustomer);
+        return new PaintOption[]{};
       }
     }
 
@@ -89,7 +90,8 @@ public class App {
       String customerPaintFinish = customerPaintOption.paintFinish;
 
       if (!solution[colorIndex - 1].paintFinish.equals(customerPaintFinish) && !solution[colorIndex - 1].mutable) {
-        erorrAndExit(singleOptionCustomer);
+        printError(singleOptionCustomer);
+        return new PaintOption[] {};
       }
       solution[colorIndex - 1] = customerPaintOption;
     }
@@ -161,9 +163,8 @@ public class App {
     return customerMap;
   }
 
-  private void erorrAndExit(Customer multiOptionCustomer) {
+  private void printError(Customer multiOptionCustomer) {
     System.out.println("Impossible to satisfy " + multiOptionCustomer);
-    System.exit(0);
   }
 
   public static void printPaintOptions(PaintOption[] results) {

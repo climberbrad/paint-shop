@@ -48,9 +48,17 @@ public class AppTest {
     printPaintOptions(results);
   }
 
-//  @Test
-//  public void failedMatch() throws IOException {
-//    App app = new App("data/no-match.txt");
-//    app.mixPaint();
-//  }
+  @Test
+  public void sameSingleOption() throws IOException {
+    App app = new App("data/two-single-options-pass.txt");
+    PaintOption[] results = app.mixPaint();
+    assertEquals(results.length, 2);
+    printPaintOptions(results);
+  }
+
+  @Test
+  public void failedMatch() throws IOException {
+    App app = new App("data/no-match.txt");
+    app.mixPaint();
+  }
 }
