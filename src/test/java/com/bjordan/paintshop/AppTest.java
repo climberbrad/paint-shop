@@ -1,5 +1,6 @@
 package com.bjordan.paintshop;
 
+import static com.bjordan.paintshop.App.printAllCustomers;
 import static com.bjordan.paintshop.App.printPaintOptions;
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +25,10 @@ public class AppTest {
     assertEquals(results[3].paintFinish, "G");
     assertEquals(results[4].paintFinish, "M");
     printPaintOptions(results);
+
+    System.out.println("");
+    printAllCustomers(app.getCustomers());
+
   }
 
   /*
@@ -41,6 +46,9 @@ public class AppTest {
     assertEquals(results[3].paintFinish, "M");
     assertEquals(results[4].paintFinish, "G");
     printPaintOptions(results);
+
+    System.out.println("");
+    printAllCustomers(app.getCustomers());
   }
 
   /*
@@ -55,6 +63,9 @@ public class AppTest {
     assertEquals(results[0].paintFinish, "M");
     assertEquals(results[1].paintFinish, "M");
     printPaintOptions(results);
+
+    System.out.println("");
+    printAllCustomers(app.getCustomers());
   }
 
   /*
@@ -66,6 +77,9 @@ public class AppTest {
     PaintOption[] results = app.mixPaint();
     assertEquals(results.length, 2);
     printPaintOptions(results);
+
+    System.out.println("");
+    printAllCustomers(app.getCustomers());
   }
 
   /*

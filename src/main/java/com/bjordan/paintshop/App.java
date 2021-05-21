@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class App {
   public static final String MATTE = "M";
 
   private final String customerDataFile;
-
+  private Map<Customer.CustomerType, List<Customer>> customers = new HashMap<>();
 
   /**
    * Iterate through customers and put into two buckets -> 1: single PaintOption 2: multiple PaintOptions
@@ -28,6 +29,10 @@ public class App {
    */
   public App(String filePath) {
     this.customerDataFile = filePath;
+  }
+
+  public Map<Customer.CustomerType, List<Customer>> getCustomers() {
+    return Collections.unmodifiableMap(customers);
   }
 
   public PaintOption[] mixPaint() throws IOException {
@@ -42,7 +47,7 @@ public class App {
     }
 
     // build customer list into either SINGLE or MULTI_OPTION CustomerTypes
-    Map<Customer.CustomerType, List<Customer>> customers = parseCustomerData(reader);
+    customers = parseCustomerData(reader);
 
     // populate the solution with immutable PainOptions from customer with only one choice
     matchSinglePaintOptionCustomers(customers, solution);
@@ -54,7 +59,7 @@ public class App {
           multiOptionCustomer.paintOptions.stream()
               .filter(paintOption -> paintOption.paintFinish.equalsIgnoreCase(GLOSS))
               .collect(Collectors.toList());
-      boolean match = matchMultiOptionCustomer(glossOptions, solution);
+      boolean match = matchMultiOptionCustomer(multiOptionCustomer, glossOptions, solution);
 
       if (match) {
         continue;
@@ -64,7 +69,7 @@ public class App {
           multiOptionCustomer.paintOptions.stream()
               .filter(paintOption -> paintOption.paintFinish.equalsIgnoreCase(MATTE))
               .collect(Collectors.toList());
-      match = matchMultiOptionCustomer(matteOptions, solution);
+      match = matchMultiOptionCustomer(multiOptionCustomer, matteOptions, solution);
 
       if (!match) {
         printError(multiOptionCustomer);
@@ -95,6 +100,7 @@ public class App {
         return new PaintOption[]{};
       }
       solution[colorIndex - 1] = customerPaintOption;
+      singleOptionCustomer.setChosenOption(customerPaintOption);
     }
     return solution;
   }
@@ -107,15 +113,17 @@ public class App {
    * @param solution
    * @return
    */
-  private boolean matchMultiOptionCustomer(List<PaintOption> paintOptions, PaintOption[] solution) {
+  private boolean matchMultiOptionCustomer(Customer customer, List<PaintOption> paintOptions, PaintOption[] solution) {
 
     for (PaintOption customerGlossOption : paintOptions) {
       String solutionPaintFinish = solution[customerGlossOption.colorIndex - 1].paintFinish;
 
       if (solutionPaintFinish.equalsIgnoreCase(customerGlossOption.paintFinish)) {
+        customer.setChosenOption(customerGlossOption);
         return true;
       } else if (!solutionPaintFinish.equalsIgnoreCase(customerGlossOption.paintFinish) && solution[customerGlossOption.colorIndex - 1].mutable) {
         solution[customerGlossOption.colorIndex - 1] = customerGlossOption;
+        customer.setChosenOption(customerGlossOption);
         return true;
       }
     }
@@ -175,6 +183,20 @@ public class App {
       System.out.print(option.paintFinish + " ");
     }
     System.out.println("");
+  }
+
+  public static  void printAllCustomers(Map<Customer.CustomerType, List<Customer>> customers) {
+    System.out.println("Customer Choices:");
+    for (Customer singleOptionCustomer : customers.get(Customer.CustomerType.SINGLE_OPTION)) {
+      printCustomerAndChoice(singleOptionCustomer);
+    }
+    for (Customer multiOptionCustomer : customers.get(Customer.CustomerType.MULTI_OPTION)) {
+      printCustomerAndChoice(multiOptionCustomer);
+    }
+  }
+
+  public static void printCustomerAndChoice(Customer singleOptionCustomer) {
+    System.out.println(singleOptionCustomer + " CHOICE: " + singleOptionCustomer.getChosenOption());
   }
 
   public static void main(String[] args) {
