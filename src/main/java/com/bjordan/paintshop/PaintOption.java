@@ -2,10 +2,10 @@ package com.bjordan.paintshop;
 
 public class PaintOption {
   public final int colorIndex;
-  public final String paintFinish;
+  public final PaintFinish paintFinish;
   public final boolean mutable;
 
-  public PaintOption(int colorIndex, String paintFinish, boolean mutable) {
+  public PaintOption(int colorIndex, PaintFinish paintFinish, boolean mutable) {
     this.colorIndex = colorIndex;
     this.paintFinish = paintFinish;
     this.mutable = mutable;
