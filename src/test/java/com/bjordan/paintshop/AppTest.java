@@ -9,6 +9,9 @@ import java.io.IOException;
 
 public class AppTest {
 
+  /*
+   * Two customers with multiple options and one with a single option
+   */
   @Test
   public void sampleOne() throws IOException {
     App app = new App("data/sample-1.txt");
@@ -23,6 +26,9 @@ public class AppTest {
     printPaintOptions(results);
   }
 
+  /*
+   * Several customers with single options
+   */
   @Test
   public void sampleTwo() throws IOException {
     App app = new App("data/sample-2.txt");
@@ -37,6 +43,9 @@ public class AppTest {
     printPaintOptions(results);
   }
 
+  /*
+   * Two customers one with a single option which negates the multi option customer GLOSS option
+   */
   @Test
   public void sampleThree() throws IOException {
     App app = new App("data/sample-3.txt");
@@ -48,6 +57,9 @@ public class AppTest {
     printPaintOptions(results);
   }
 
+  /*
+   * Two customers with single options want the same MATTE option
+   */
   @Test
   public void sameSingleOption() throws IOException {
     App app = new App("data/two-single-options-pass.txt");
@@ -56,6 +68,9 @@ public class AppTest {
     printPaintOptions(results);
   }
 
+  /*
+   * No match possible
+   */
   @Test
   public void failedMatch() throws IOException {
     App app = new App("data/no-match.txt");
