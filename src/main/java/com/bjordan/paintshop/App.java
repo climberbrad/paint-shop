@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class App {
   }
 
   public PaintOption[] mixPaint() throws IOException {
-    // parse input file
+    // TODO: close input stream
     BufferedReader reader = new BufferedReader(new FileReader(customerDataFile));
     int numColors = Integer.valueOf(reader.readLine());
 
@@ -91,7 +92,7 @@ public class App {
 
       if (!solution[colorIndex - 1].paintFinish.equals(customerPaintFinish) && !solution[colorIndex - 1].mutable) {
         printError(singleOptionCustomer);
-        return new PaintOption[] {};
+        return new PaintOption[]{};
       }
       solution[colorIndex - 1] = customerPaintOption;
     }
@@ -137,19 +138,21 @@ public class App {
       Pattern pattern = Pattern.compile(regex);
       Matcher matcher = pattern.matcher(line);
 
-      List<PaintOption> paintOptions = new ArrayList<>();
-      while (matcher.find()) {
-        String[] split = matcher.group().split("\\s");
 
+      List<PaintOption> paintOptions = new ArrayList<>();
+      List<MatchResult> matches = matcher.results().collect(Collectors.toList());
+      int numOptions = matches.size();
+      for (MatchResult match : matches) {
+        String[] split = match.group().split("\\s");
         Integer colorIndex = Integer.valueOf(split[0]);
         String paintFinish = split[1];
 
-        paintOptions.add(new PaintOption(colorIndex, paintFinish, true));
+        paintOptions.add(new PaintOption(colorIndex, paintFinish, (numOptions > 1)));
       }
 
+      // TODO: make customer interface with multi and single implementations
       // split customers into single option and multi-option
-      if (paintOptions.size() == 1) {
-        paintOptions.get(0).setMutable(false); // hack due to matcher not having a count()
+      if (numOptions == 1) {
         singleOptionCustomers.add(new Customer(Arrays.asList(paintOptions.get(0))));
       } else {
         multipleOptionCustomers.add(new Customer(paintOptions));
